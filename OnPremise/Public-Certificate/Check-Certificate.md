@@ -1,3 +1,5 @@
+# Check-Certificate
+
 ```
 .\Check-Certificate.ps1 -SiteToScan www.powershellcenter.com
 .\Check-Certificate.ps1 -SiteToScan www.powershellcenter.com -SaveAsTo C:\MyFile
