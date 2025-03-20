@@ -1,11 +1,15 @@
 param(
-    [parameter(Mandatory=$true)][string]$Customer
+    [parameter(Mandatory=$true)][string]$Customer,
+    [DateTime]$Date
 )
 
 Begin {
     $Computers  = $null
     $AllDomains = (Get-ADDomainController -Filter *).HostName
-    $Date       = (Get-Date).AddMonths(-6)
+    if ($null = $Date)
+    {
+        $Date   = (Get-Date).AddMonths(-6)
+    }
 }
 
 Process {
