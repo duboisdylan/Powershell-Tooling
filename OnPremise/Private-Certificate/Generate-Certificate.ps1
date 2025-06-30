@@ -10,8 +10,8 @@ Begin {
 
 Process {
     # Create certificate
-    $mycert = New-SelfSignedCertificate -DnsName $DnsName -CertStoreLocation "cert:\CurrentUser\My" -NotAfter (Get-Date).AddYears(1) -KeySpec KeyExchange
-
+    $mycert = New-SelfSignedCertificate -DnsName $DnsName -CertStoreLocation "cert:\CurrentUser\My" -NotAfter (Get-Date).AddYears(1) -KeyExportPolicy "Exportable" -KeySpec "Signature" -KeyLength "2048" -KeyAlgorithm "RSA" -HashAlgorithm "SHA256"
+    
     # Export certificate to .pfx file
     $mycert | Export-PfxCertificate -FilePath "..\..\Ressources\$($DnsName.Split(".")[0]).pfx" -Password $SecurePassword
 
