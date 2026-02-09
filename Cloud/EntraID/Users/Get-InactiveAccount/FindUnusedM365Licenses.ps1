@@ -82,7 +82,7 @@ Function Connect_MgGraph {
 
 Connect_MgGraph
 
-$ExportCSV = "..\..\..\_Output\UnusedM365LicensesByLastSignIn_$((Get-Date -format yyyy-MMM-dd-ddd` hh-mm-ss` tt).ToString()).csv"
+$ExportCSV = "UnusedM365LicensesByLastSignIn_$((Get-Date -format yyyy-MMM-dd-ddd` hh-mm-ss` tt).ToString()).csv"
 $ExportResult = ""
 $Count = 0
 $PrintedUsers = 0
@@ -94,7 +94,7 @@ if( $ImportCSVPath -ne "" -and !(Test-Path $ImportCSVPath)){
 
 #Get Licenses
 $FriendlyNameHash = @{}
-Import-Csv -Path "..\..\..\_Ressources\LicenseFriendlyName.csv" -ErrorAction Stop | ForEach-Object{
+Import-Csv -Path ".\LicenseFriendlyName.csv" -ErrorAction Stop | ForEach-Object{
     $FriendlyNameHash[$_.String_Id] = $_.Product_Display_Name
 }
 $LicenseMap = @{}
