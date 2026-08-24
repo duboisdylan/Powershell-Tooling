@@ -1,4 +1,4 @@
-# Create-BulkSecurityGroupsWithFile
+# New-BulkSecurityGroupsWithFile
 
 ```
-.\Create-BulkSecurityGroupsWithFile.ps1 -LoadFromFile "Create-BulkSecurityGroupsWithFile.txt"
+.\New-BulkSecurityGroupsWithFile.ps1 -LoadFromFile "New-BulkSecurityGroupsWithFile.txt"

@@ -1,4 +1,4 @@
-# Create-BulkSecurityGroupsWithFile
+# Send-AppCertsAndSecretsExpiryNotification
 
 ```
-.\Create-BulkSecurityGroupsWithFile.ps1 -LoadFromFile "Create-BulkSecurityGroupsWithFile.txt"
+.\Send-AppCertsAndSecretsExpiryNotification.ps1 -SoonToExpireInDays 30 -Recipients "admin@example.com" -FromAddress "alerts@example.com"
