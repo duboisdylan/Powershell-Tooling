@@ -56,7 +56,7 @@
                    3010 = redémarrage requis
 #>
 
-[CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
+[CmdletBinding(SupportsShouldProcess)]
 param(
     [switch]$DetectOnly,
     [switch]$IncludeUserInstalls,
@@ -241,7 +241,7 @@ function Stop-ChromeProcess {
         'GoogleCrashHandler', 'GoogleCrashHandler64',
         'GoogleUpdate', 'GoogleUpdater', 'GoogleUpdateOnDemand', 'elevation_service'
     )
-    $procs = Get-Process -Name $names -ErrorAction SilentlyContinue
+    $procs = @(Get-Process -Name $names -ErrorAction SilentlyContinue)
     if (-not $procs) { return $true }
 
     if (-not $Force) {
@@ -405,7 +405,7 @@ function Remove-ChromeResidue {
             }
     }
 
-    foreach ($p in $paths | Where-Object { $_ -and (Test-Path -LiteralPath $_) }) {
+    foreach ($p in $paths | Where-Object { $_ -and (Test-Path -LiteralPath $_ -ErrorAction SilentlyContinue) }) {
         if ($PSCmdlet.ShouldProcess($p, 'Supprimer')) {
             try {
                 Remove-Item -LiteralPath $p -Recurse -Force -ErrorAction Stop
@@ -422,10 +422,12 @@ function Remove-ChromeResidue {
 
 $script:RebootRequired = $false
 
-Write-Log '=== Uninstall-Chrome : démarrage ==='
-Write-Log "Poste : $env:COMPUTERNAME | Contexte : $env:USERNAME | Élévation : $(Test-Elevated)"
+$script:IsElevated = Test-Elevated
 
-if (-not (Test-Elevated)) {
+Write-Log '=== Uninstall-Chrome : démarrage ==='
+Write-Log "Poste : $env:COMPUTERNAME | Contexte : $env:USERNAME | Élévation : $script:IsElevated"
+
+if (-not $script:IsElevated) {
     Write-Log 'Script non élevé : les installations machine ne pourront pas être désinstallées.' 'WARN'
 }
 
@@ -466,6 +468,10 @@ if (-not (Stop-ChromeProcess)) {
 
 $success = $true
 foreach ($i in $installs) {
+    if ($i.Scope -eq 'Machine' -and -not $script:IsElevated) {
+        Write-Log "Ignoré (droits insuffisants) : $($i.DisplayName) $($i.DisplayVersion) ($($i.Scope)/$($i.Type))" 'WARN'
+        continue
+    }
     if (-not (Invoke-Uninstall -Installation $i)) { $success = $false }
 }
 
